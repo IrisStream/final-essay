@@ -1,20 +1,110 @@
-\chapter{Các công trình liên quan}
+\chapter{Tổng quan lý thuyết}
 \label{Chapter2}
-\subsection{Blockchain}
-Trong những năm gần đây, với sự mở rộng và phát triển nhanh chóng của các loại tiền ảo (cryptocurrency) như Bitcoin[], Etherum[], Zcash[], ...etc, khiến cho mức độ quan tâm đến công nghệ nền tảng của chúng, blockchain, tăng lên đáng kể. Trên thực tế, blockchain đã cho thấy công nghệ này không chỉ đóng vai trò quan trọng trong các lĩnh vực liên quan đến tài chính, mà các ứng dụng của nó đã và đang dần phổ biến rộng rãi trên nhiều lĩnh vực phi tài chính khác. Shen[] đã tổng hợp các ứng dụng của blockchain trong việc phát triển đô thị thông minh và sắp xếp chúng thành 9 danh mục, bao gồm: quản lý nhà nước(governance and citizen engagement), giáo dục, chăm sóc sức khỏe, kinh tế, giao thông vận tải, năng lượng, quản lý nước và chất thải, công trình công cộng và bảo vệ môi trường. Jaroodi[] cũng đã chỉ ra các lợi ích cũng như thách thức của việc sử dụng blockchain trong các lĩnh vực: tài chính, chăm sóc sức khỏe, các hoạt động thương mại, sản xuất, năng lượng, nông nghiệp và thực phẩm, tự động hóa, xây dựng, truyền thông và các ứng dụng giải trí. 
-\subsubsection{Blockchain trong việc bảo vệ dữ liệu và thông tin cá nhân}
-Bảo mật thông tin cá nhân khi sử dụng internet đã và đang là một vấn đề nan giải khi các mạng xã hội liên tục thu thập thông tin người dùng, bao gồm các thông tin cá nhân, hoạt động và thói quen. Người sử dụng các mạng xã hội gặp khó khăn trọng việc quản lý các loại thông tin mà nhà cung cấp dịch vụ được quyền thu thập và mục đích sử dụng các thông tin này và thường không thể rút lại các quyền truy cập đã cho phép. Zyskind[] đề xuất một ý tưởng lưu trữ các chính sách truy cập thông tin trên một Blockchain và để cho các node của Blockchain truy cập thông tin từ một bảng băm phân tán (Distributed hash table). Khi người dùng muốn cấp hoặc hủy bỏ quyền truy cập vào thông tin cá nhân, Blockchain đóng vai trò như một nhà phân phối chỉ cho phép bên thứ 3 truy cập các thông tin đã được cấp quyền. Wang[] đề xuất một mô hình kết hợp hệ thống lưu trữ phân tán (decentrailize storage system), Etherum Blockchain và kĩ thuật mã hóa dựa trên thuộc tính (attribute-based ecryption). Mô hình này cho phép người dùng tìm kiếm trên các thông tin đã mã hóa dựa vào các hợp đồng thông minh (smart contract) của Etherum. Đồng thời cũng cho phép người sở hữu thông tin phân phối các khóa bí mật cho người dùng và chia sẻ thông tin thông qua các chính sách truy cập đặc tả. \\
-\subsubsection{Blockchain trong các hệ thống IOT}
+\section{Mô hình Transformer dịch máy}
 
-\subsubsection{Các hệ thống lưu trữ phân tán - (Decentralize storage systems)}
-Các hệ thống lưu trữ phân tán hướng đến việc chia nhỏ dữ liệu và phân phối chúng lên các node trong một mạng lưới có sẵn thay vì dồn nén tất cả dữ liệu trong một server duy nhất. Dựa vào bảng A, ta nhận thấy các hệ thống lưu trữ phân tán có một số ưu điểm so với cách lưu trữ tập trung truyền thống.
+\subsection{Tổng quan mô hình}
+
+Transformer là một mô hình có kiến trúc encoder-decoder. Mô hình bao gồm 2 thành phần chính là Encoder(bộ mã hóa) và Decoder(bộ giải mã). Khi đưa một đoạn văn bản nguồn vào, mô hình sẽ xử lý vào đưa ra đoạn văn bản có ngữ nghĩa tương ứng ở ngôn ngữ đích.
+
+(Hình minh họa encoder-decoder)
+
+Cụ thể hơn, Bộ mã hóa sẽ bao gồm nhiều lớp mã hóa xếp chồng lên nhau. Theo paper transformer, họ sử dụng 6 lớp mã hóa để tạo thành một bộ mã hóa.  Bộ giải mã, tương tự cũng được xếp chồng bởi các lớp giải mã. Số lượng lớp của 2 thành phần phải bằng nhau.
+
+(hình transformer high level)
+
+\subsubsection{Encoder}
+Các lớp của bộ mã hóa là độc lập nhau và có cấu trúc tương tự nhau. Đầu vào của lớp đầu tiên sẽ là các word embeddings đã được xử lý qua lớp positional encoding, các lớp phía trên sẽ có đầu vào là các vector output từ lớp ngay dưới. Các vector đầu vào của các lớp này được gọi là context vector.
+
+Với mỗi lớp mã hóa sẽ bao gồm 2 lớp con:
 \begin{itemize}
-    \item Khi một hệ thống bị tấn công, việc phân tán dữ liệu sẽ giảm thiểu được rủi ro về thông tin bị lộ một cách toàn vẹn.
-    \item Ngoài ra, tính tồn tại của một hệ thống lưu trữ phân tán cũng cao hơn, khi một hoặc nhiều node bị ngắt kết nối, các node còn lại có thể được lập trình để hoạt động độc lập. Điều này tốt hơn nhiều so với việc một hệ thống  lưu trữ tập trung sẽ ngưng hoạt động khi server lưu trữ bị ngắt kết nối.
-    \item Cuối cùng, một hệ thống lưu trữ phi tập trung sẽ thân thiện hơn với người dùng thông qua việc cho phép người sử dụng dịch vụ trả phí theo dung lượng đã sử dụng thay vì phải trả trước để mua dung lượng như cách làm hiện tại của các hệ thống lưu trữ tập trung.
-\end{itemize} 
+	\item Self-attetion: Với mỗi từ trong đoạn văn bản, xem xét độ liên quan của nó với các từ khác trong câu đầu vào. Đưa ra phân bố xác xuất đối với từng từ một.
+	\item Feed forwarding: Mã hóa phân bố xác xuất tính toán được thành các context vector để đưa vào các lớp mã hóa phía trên.
+\end{itemize}
 
+(hình minh họa cụ thể encoder)
 
-\subsection{Mã hóa bất đối xứng}
+\subsubsection{Decoder}
+Các lớp của bộ giải mã cũng có 2 lớp con là Self-attention và Feed-forwarding giống với bộ mã hóa. Tuy nhiên giữa 2 lớp con này có một lớp trung gian là Encoder-Decoder attention. Lớp này có cơ chế giống với cơ chế attention trong mô hình Seq2Seq với thông tin của các hidden layer chính là đầu ra của bộ mã hóa.
 
-\subsection{Chữ kí điện tử}
+(hình minh họa cụ thể decoder)
+
+\subsection{Cơ chế Self-attention}
+
+\subsubsection{Cơ sở}
+Self-attention là một cơ chế mới được giới thiệu trong "attention is all need". Cơ chế này khác với cơ chế attention trong các mạng Seq2Seq trước đó. Self-attention cho phép ta biểu diễn lại mối quan hệ giữa các từ trong một đoạn văn bản.
+
+(Hình minh họa self-attention)
+
+Hình trên cho ta một minh họa về cơ chế self-attention. Xét từ "two", theo tư duy của con người, ta sẽ phân tích xem từ "two" trong câu đang có quan hệ gì với những từ khác. Ngoài ra, ta còn xem xét tầm quan trọng của các từ khác tác động lên ý nghĩa của câu. Từ đó mà ta có thể có được một cái nhìn rõ ràng hơn về vai trò của từ này trong câu.
+
+Cụ thể hơn, khi mô hình xử lý từ "two", self-attention cho ta thấy được mối liên kết của nó với từ "specialists". Thể hiện vai trò của nó là dùng để chỉ số lượng của các chuyên gia là hai.
+
+\subsubsection{Chi tiết}
+Việc tính toán ở mỗi lớp self attention được tính toán dựa trên công thức sau:
+
+\begin{equation*}
+	Attention = Softmax(\frac{QK^T}{\sqrt{d}})V
+\end{equation*}
+
+Trong đó, Q, K, V lần lượt là các ma trận Query, Key, Value. Hai ma trận query và key được dùng để tính toán mối quan hệ giữa các từ trong câu. Còn mỗi dòng thứ của ma trận V đại diện cho từ thứ i trong câu. Từ phân bố softmax, ta tính được context vector, tổng hợp được các thông tin của từ hiện tại và các từ liên quan đến nó. 
+
+Trong công thức, ta thấy được tích vô hướng của ma trận Q và K được chuẩn hóa bởi hệ số $\sqrt{d}$ (d là số chiều của vector embedding). Lý do cho việc chuẩn hóa này là do khi d có giá trị lớn, tích vô hướng của Q và K sẽ có giá trị lớn theo do đó, nếu không chuẩn hóa về giá trị nhỏ hơn thì hàm softmax sẽ có độ hội tụ khá chậm.
+
+(minh họa đồ thị đạo hàm softmax)
+
+Từ công thức tính của self-attention, ta có thể thấy rõ sự khác biệt giữa bộ mã hóa của transformer và bộ mã hóa của các mô hình Seq2Seq sử dụng RNN. Đối với RNN, dữ liệu đầu vào phải được mã hóa một cách tuần tự. Trong khi đối với self-attention, các từ trong văn bản có thể được mã hóa một cái song song và không bị phụ thuộc vào nhau. Nhờ đó mà có thể tăng được hiệu quả tính toán.
+
+\subsection{Cơ chế Multihead-attention}
+Đầu ra của self-attention cho ta biết được mối quan hệ của các từ trong câu dựa trên một góc nhìn nào đó. Bằng các xếp chồng nhiều lớp self-attention lại với nhau. Ta có thể biết được sự liên quan của các từ ngữ trong câu với nhiều gốc nhìn khác nhau. Từ đó mà có được thông tin đầy đủ hơn về câu cần dịch. 
+
+Cơ chế xếp chồng nhiều lớp self-attention lại với nhau được gọi là Multihead-attention. 
+
+Ngoài ra, sử dụng cơ chế self-attention còn giúp ta tránh được trường hợp một từ phụ thuộc hoàn toàn vào chính nó. Ta mong muốn một phân bố xác suất quan hệ giữa một từ với các từ có ảnh hưởng đến nó.
+
+Với việc sử dụng N lớp self-attention chạy song song với các bộ trọng số khác nhau, ta có được N ma trận context khác nhau. Lúc này, ta cần có một phương phát khác để tổng hợp thông tin từ các lớp self-attention này lại để đưa vào lớp feed-forward. 
+
+(Hình minh họa multi context vector)
+
+Để làm được việc đó, transformer ghép theo chiều ngang các ma trận context lại rồi nhân với một bộ trọng số để đưa ra một kết quả duy nhất là một ma trận với các dùng là các context vector cũng đồng thời là đầu vào cho bộ giải mã ở phía trên.
+
+(Hình minh họa feed-forward)
+
+Hình dưới minh họa cho việc sử dụng nhiều lớp self-attention trên cùng một câu với mỗi một màu tương ứng với kết quả của một lớp self-attention khác nhau.
+
+(Hình minh họa multi head attention)
+
+\subsection{Positional encoding}
+
+Cách tính toán song song của cơ chế self-attention dẫn đến một vấn đề đối với các từ trong đầu vào. Embeedings biểu diễn các từ này chưa biểu diễn được thông tin về thứ tự của các từ trong câu. Trong khi thông tin này là một thông tin quan trọng vì thay đổi vị trí của các từ có thể dẫn đến một câu hoàn toàn khác ý nghĩa.
+
+(Hình minh họa về thứ tự từ hoặc câu minh họa)
+
+Transformer sử dụng cơ chế positional encoding. Cơ chế này giúp đưa thông tin về vị trí của các từ vào trong các embeddings. Cụ thể hơn, trước khi embeddings được đưa vào trong mô hình, nó được cộng với một vector tương ứng với vị trí trong câu. Những vector này tuân theo một một quy định nhất định. Chúng phải thể hiện được sự khác biệt về vị trí của các từ trong câu và cả khoảng cách của các từ trong câu. 
+
+Công thức tính toán các vector này như sau: 
+\begin{equation*}
+	PE_{(pos, 2i)} = \sin{\frac{pos}{10000^{\frac{2i}{d_model}}}}
+\end{equation*}
+\begin{equation*}
+	PE_{(pos, 2i+1)} = \cos{\frac{pos}{10000^{\frac{2i}{d_model}}}}
+\end{equation*}
+
+(Lý giải về công thức)
+
+\subsection{residuals}
+Để tránh các trường hợp vanishing graient, Transformer kết hợp các đường residual và mạng encoder. Từ đó mà thông tin từ các lớp trước có thể được sử dụng lại trong khi huấn luyện các lớp sau.
+
+(Hình minh họa Residual)
+
+\subsection{decoder}
+
+\subsection{Tổng kết mô hình}
+
+\section{Mô hình WordGCN huấn luyện embedding cho bộ ngữ liệu}
+\subsection{Lý thuyết đồ thị cơ bản}
+
+\subsection{Mô hình Graph Convolution Network}
+
+\subsection{Mô hình WordGCN}
+\subsubsection{Mô hình SynGCN}
+\subsubsection{Mô hình SemGCN}
