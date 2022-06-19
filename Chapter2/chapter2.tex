@@ -12,7 +12,8 @@ Cụ thể hơn, Bộ mã hóa sẽ bao gồm nhiều lớp mã hóa xếp chồ
 
 (hình transformer high level)
 
-\subsubsection{Encoder}
+
+\subsection{Encoder}
 Các lớp của bộ mã hóa là độc lập nhau và có cấu trúc tương tự nhau. Đầu vào của lớp đầu tiên sẽ là các word embeddings đã được xử lý qua lớp positional encoding, các lớp phía trên sẽ có đầu vào là các vector output từ lớp ngay dưới. Các vector đầu vào của các lớp này được gọi là context vector.
 
 Với mỗi lớp mã hóa sẽ bao gồm 2 lớp con:
@@ -23,14 +24,8 @@ Với mỗi lớp mã hóa sẽ bao gồm 2 lớp con:
 
 (hình minh họa cụ thể encoder)
 
-\subsubsection{Decoder}
-Các lớp của bộ giải mã cũng có 2 lớp con là Self-attention và Feed-forwarding giống với bộ mã hóa. Tuy nhiên giữa 2 lớp con này có một lớp trung gian là Encoder-Decoder attention. Lớp này có cơ chế giống với cơ chế attention trong mô hình Seq2Seq với thông tin của các hidden layer chính là đầu ra của bộ mã hóa.
+\subsubsection{Cơ chế Self-attention}
 
-(hình minh họa cụ thể decoder)
-
-\subsection{Cơ chế Self-attention}
-
-\subsubsection{Cơ sở}
 Self-attention là một cơ chế mới được giới thiệu trong "attention is all need". Cơ chế này khác với cơ chế attention trong các mạng Seq2Seq trước đó. Self-attention cho phép ta biểu diễn lại mối quan hệ giữa các từ trong một đoạn văn bản.
 
 (Hình minh họa self-attention)
@@ -39,7 +34,6 @@ Hình trên cho ta một minh họa về cơ chế self-attention. Xét từ "tw
 
 Cụ thể hơn, khi mô hình xử lý từ "two", self-attention cho ta thấy được mối liên kết của nó với từ "specialists". Thể hiện vai trò của nó là dùng để chỉ số lượng của các chuyên gia là hai.
 
-\subsubsection{Chi tiết}
 Việc tính toán ở mỗi lớp self attention được tính toán dựa trên công thức sau:
 
 \begin{equation*}
@@ -48,13 +42,25 @@ Việc tính toán ở mỗi lớp self attention được tính toán dựa tr�
 
 Trong đó, Q, K, V lần lượt là các ma trận Query, Key, Value. Hai ma trận query và key được dùng để tính toán mối quan hệ giữa các từ trong câu. Còn mỗi dòng thứ của ma trận V đại diện cho từ thứ i trong câu. Từ phân bố softmax, ta tính được context vector, tổng hợp được các thông tin của từ hiện tại và các từ liên quan đến nó. 
 
-Trong công thức, ta thấy được tích vô hướng của ma trận Q và K được chuẩn hóa bởi hệ số $\sqrt{d}$ (d là số chiều của vector embedding). Lý do cho việc chuẩn hóa này là do khi d có giá trị lớn, tích vô hướng của Q và K sẽ có giá trị lớn theo do đó, nếu không chuẩn hóa về giá trị nhỏ hơn thì hàm softmax sẽ có độ hội tụ khá chậm.
+Trong công thức, ta thấy được tích vô hướng của ma trận Q và K được chuẩn hóa bởi hệ số $\sqrt{d}$ (d là số chiều của vector embedding). Lý do cho việc chuẩn hóa này là do khi d có giá trị lớn, tích vô hướng của Q và K sẽ có giá trị lớn theo do đó, nếu không chuẩn hóa về giá trị nhỏ hơn thì hàm softmax sẽ có độ hội tụ khá chậm
 
 (minh họa đồ thị đạo hàm softmax)
 
+\begin{algorithm}[H]
+    \caption{Self\_attention($context, w_K, w_Q, w_V$)}
+    \begin{algorithmic}[1]
+		\State \textbf{Result:} $Z$
+		\State {$K \gets context \times w_K$}
+		\State {$Q \gets context \times w_Q$}
+		\State {$V \gets context \times w_V$}
+		\State {$Score \gets QK^T$}
+		\State {$Z \gets \frac{softmax(Score)}{\sqrt{d}}V$}
+    \end{algorithmic}
+\end{algorithm}
+
 Từ công thức tính của self-attention, ta có thể thấy rõ sự khác biệt giữa bộ mã hóa của transformer và bộ mã hóa của các mô hình Seq2Seq sử dụng RNN. Đối với RNN, dữ liệu đầu vào phải được mã hóa một cách tuần tự. Trong khi đối với self-attention, các từ trong văn bản có thể được mã hóa một cái song song và không bị phụ thuộc vào nhau. Nhờ đó mà có thể tăng được hiệu quả tính toán.
 
-\subsection{Cơ chế Multihead-attention}
+\subsubsection{Cơ chế Multihead-attention}
 Đầu ra của self-attention cho ta biết được mối quan hệ của các từ trong câu dựa trên một góc nhìn nào đó. Bằng các xếp chồng nhiều lớp self-attention lại với nhau. Ta có thể biết được sự liên quan của các từ ngữ trong câu với nhiều gốc nhìn khác nhau. Từ đó mà có được thông tin đầy đủ hơn về câu cần dịch. 
 
 Cơ chế xếp chồng nhiều lớp self-attention lại với nhau được gọi là Multihead-attention. 
@@ -73,7 +79,19 @@ Hình dưới minh họa cho việc sử dụng nhiều lớp self-attention tr�
 
 (Hình minh họa multi head attention)
 
-\subsection{Positional encoding}
+\begin{algorithm}[H]
+    \caption{Multihead attention($context$)}
+    \begin{algorithmic}[1]
+		\State \textbf{Result:} $Z \times w_O$
+		\For{$1...number\_of\_head$}
+			\State $Z_i \gets self\_attention(context, wK_i, wQ_i, wV_i)$
+		\EndFor
+		\State $Z \gets [Z_1, Z_2,... ,Z_{number\_of\_head}]$
+    \end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{Positional encoding}
 
 Cách tính toán song song của cơ chế self-attention dẫn đến một vấn đề đối với các từ trong đầu vào. Embeedings biểu diễn các từ này chưa biểu diễn được thông tin về thứ tự của các từ trong câu. Trong khi thông tin này là một thông tin quan trọng vì thay đổi vị trí của các từ có thể dẫn đến một câu hoàn toàn khác ý nghĩa.
 
@@ -91,17 +109,171 @@ Công thức tính toán các vector này như sau:
 
 (Lý giải về công thức)
 
+
+\subsection{Decoder}
+Các lớp của bộ giải mã cũng có 2 lớp con là Self-attention và Feed-forwarding giống với bộ mã hóa. Tuy nhiên giữa 2 lớp con này có một lớp trung gian là Encoder-Decoder attention. Lớp này có cơ chế giống với cơ chế attention trong mô hình Seq2Seq với thông tin của các hidden layer chính là đầu ra của bộ mã hóa.
+
+(hình minh họa cụ thể decoder)
+
+\subsubsection{Masked self attention}
+
+Khác với lớp self-attention ở bộ mã hóa, lớp masked self attention ở bộ giải mã chỉ tìm kiếm các mối quan hệ của từ hiện tại với các từ đã được giải mã trước đó. Do đó, trước khi thực hiện tính toán trên hàm softmax, giá trị score của các từ chưa được giải mã sẽ được gắn nhãn là $-\infty$. Sau đó, các bước tính toán sẽ tương tự như trong bộ mã hóa.
+
+(Hình minh họa masked self-attenion)
+
+Ta có thể điều chỉnh lại hàm self attention như sau:
+
+\begin{algorithm}[H]
+    \caption{Self\_attention($context, w_K, w_Q, w_V, masked$)}
+    \begin{algorithmic}[1]
+		\State \textbf{Result:} $Z$
+		\State {$K \gets context \times w_K$}
+		\State {$Q \gets context \times w_Q$}
+		\State {$V \gets context \times w_V$}
+		\State {$Score \gets QK^T$}
+		\For{$i=masked + 1...len(context)$}
+			\State Cột thứ i của $Score = -\infty$
+		\EndFor
+		\State {$Z \gets \frac{softmax(Score)}{\sqrt{d}}V$}
+    \end{algorithmic}
+\end{algorithm}
+
+Tham số masked thể hiện kể từ vị trí này, các phần tử phía sau của score sẽ được gán giá trị $-\infty$. Hàm self\_attention được gọi bởi hàm multihead\_attention. Do đó, ta cần truyền thêm tham số masked vào hàm này. Ta mặc định masked = len(context), nhờ vậy mà mà cần truyền thêm tham số này khi gọi trong bộ mã hóa.
+
+
+\subsubsection{encoder-decoder attention}
+Một điểm khác biệt dễ thấy giữa bộ mã hóa và bộ giải mà là lớp encoder-decoder attention được đặt giữa 2 lớp self attetion lvâf feed-forward. Công dụng của lớp này giúp cho decoder có thể giải mã ra được các từ của văn bản đích dựa trên độ liên quan của mỗi từ với các từ trong văn bản nguồn. 
+
+(Minh họa encoder-decoder attention)
+
+Đầu ra lớp trên cùng của mã hóa sẽ được biến đổi thành 2 vector K và V. Quá trình giải mã được thực hiện như sau:
+
+
+\begin{algorithm}[H]
+    \caption{decoder(context, pos)}
+    \begin{algorithmic}[1]
+		\State \textbf{Result:} $feed\_forward(context)$
+		\State $context \gets multihead\_attention(context, masked = pos)$
+		\State $context \gets normalize(context)$
+		\State $context \gets encoder\_decoder\_attention(K_{enc}, V_{env}, context)$
+    \end{algorithmic}
+\end{algorithm}
+
+Để biểu thị cho mở đầu của đoạn văn bản và kết thúc của đoạn văn bản đến đánh dấu việc bắt đầu giải mã và kết thúc giải mã. Transformer sử dụng 2 token đặc biệt nằm tách biệt với bộ từ vựng: "<bos>" (begin of sentence) và "<eos>" (end of sentence).
+
+Quá trình giải mã sẽ được bắt đầu với token "<bos>" và thực hiện một cách tuần từ cho đến khi giải mã ra token "<eos>". Từ được giải mã ở bước trước sẽ được sử dụng làm đầu vào cho bước giải mã tiếp theo. Cụ thể thuật toán của toàn bộ quá trình giải mã như sau:
+
+\begin{algorithm}[H]
+    \caption{Quá trình giải mã}
+    \begin{algorithmic}[1]
+		\State Khởi tạo $output_i \gets "<bos>"$
+		\State Khởi tạo $i \gets 1$
+		\Do
+			\State $embed_i \gets position\_encoding(output_{i-1})$
+			\State $context \gets embed_i$
+			\For $j = 1...number\_decoder\_layer$
+				\State $context \gets decoder(context, masked = i)$
+			\EndFor
+			\State $output_i \gets softmax(context)$
+		\doWhile $output_i \neq "<eos>"$
+    \end{algorithmic}
+\end{algorithm}
+
+
 \subsection{residuals}
-Để tránh các trường hợp vanishing graient, Transformer kết hợp các đường residual và mạng encoder. Từ đó mà thông tin từ các lớp trước có thể được sử dụng lại trong khi huấn luyện các lớp sau.
+Để tránh các trường hợp vanishing graident, Transformer kết hợp kiến trúc residual vào mạng encoder. Từ đó mà thông tin từ các lớp trước có thể được sử dụng lại trong khi huấn luyện các lớp sau.
+
+với mỗi lớp con trong cả bộ mã hóa lẫn bộ giải mã, ta đặt thêm một lớp normalize vào ngay trên lớp con đó. Lớp normalize này nhận vào input là kết quả của lớp con ngay dưới của nó và cả đầu vào trước khi đi vào lớp con đó. Thưc hiện phép cộng 2 ma trận này và chuẩn hóa lại trước khi đưa vào lớp con phía trên.
 
 (Hình minh họa Residual)
 
-\subsection{decoder}
 
 \subsection{Tổng kết mô hình}
 
+Tổng kết lại, kiến trúc của Transformer bao gồm 2 thành phần chính là bộ mã hóa và bộ giải mã. Bộ mã hóa được tạo bởi nhiều lớp con gọi là các lớp mã hóa. Tương tự, bộ giải mã cũng được hình thành từ các lớp giải mã được xếp chồng lên nhau. Số lượng lớp con của bộ mã hóa bằng với số lượng lớp con của bộ giải mã.
+
+Với mỗi lớp con của bộ mã hóa sẽ bao gồm một lớp multihead-attention và một lớp feed-forward. Ngoài ra còn áp dụng thêm kiến trúc residual block với các lớp normalize.
+
+Với mỗi lớp giải mã, chúng được xếp chồng bởi 3 lớp con lần lượt là: masked-multihead-attention, encoder-decoder-attention và feed-forwarding. Lớp giải mã cũng được áp dụng kiến trúc residual block giúp mô hình tránh được hiện tượng vanishing gradient.
+
+(Hình minh họa tổng kết mô hình)
+
+
 \section{Mô hình WordGCN huấn luyện embedding cho bộ ngữ liệu}
+
 \subsection{Lý thuyết đồ thị cơ bản}
+
+\subsubsection{Định nghĩa đồ thị}
+
+Đồ thị được định nghĩa là một cấu trúc rời rạc gồm các đỉnh và các cạnh nối các đỉnh đó. Ký hiệu biểu diễn một đồ thị như sau:
+\begin{equation*}
+	G = (V,E)
+\end{equation*}
+
+Trong đó, V là tập các đỉnh (Vertices) và E là tập các cạnh (Edges). Các cạnh trong tập E được bởi diễn bởi một cặp (x,y) với $x,y \in V$. Số lượng đỉnh của đồ thị là $|V| = n$, còn số lượng cạnh của đồ thị là $|E| = m$
+
+\subsubsection{Các loại đồ thị}
+Đơn đồ thị (simple graph) là đồ thị thỏa $\forall x,y \in V | $ không tồn tại quá 1 cạnh nối giữa hai đỉnh này.
+
+Đa đồ thị (multigraph) là đồ thị thỏa $\forall x,y \in V | $ có thể có nhiều hơn 1 cạnh nối giữa 2 đỉnh này 
+
+Giả đồ thị (speudo graph) là đồ thị chứa các đỉnh có khả năng nối cạnh với chính nó.
+
+Đồ thị vô hướng (undirected graph) là đồ thị chứa các cạnh không định hướng. Nói cách khác, cạnh nối hai đỉnh x và y cũng sẽ được hiểu là cạnh đỉnh y với đỉnh x.
+
+Đồ thị có hướng (directed graph) là đồ thị chứa các cạnh có hướng. nói cách khác, cạnh nói hai đỉnh x và y sẽ phân biệt với cạnh nối từ y đến x.
+
+Đồ thị có trọng số là đồ thị mà các cạnh của đồ thị được biểu diễn bằng một trọng số nào đó. Lúc này mỗi cạnh $e \in E$ sẽ được biểu diễn bởi $(x, y, w)$. Với x và y là hai đỉnh của cạnh và w là trọng số của cạnh đó
+
+Đồ thị không trọng số là đồ thị mà các cạnh của đồ thị không được biểu diễn bởi một trọng số.
+
+(Ảnh minh họa các loại đồ thị)
+
+Ngoài ra, khi kết hợp cách tính chất của các loại đồ thị khác nhau, ta có thể có được các dạng đồ thị khác như: Đơn đồ thị vô hướng, Đa đồ thị có hướng, Giả Đa đồ thị có hướng có trọng số,..
+
+Đồ thị còn có thể phân loại theo đồ thị vô hạn và độ thị hữu hạn, chỉ số lượng cạnh và đỉnh của đồ thị là vô hạn hay có thể đếm được.
+
+\subsubsection{vector đặc trưng (feature vectors)}
+
+Lý thuyết đồ thị khi được áp dụng vào các bài toán học máy thường sẽ được bổ sung thêm khác khái niệm vector đặc trưng. Vector đặc trưng là những vector chỉ các đặc trưng của một đỉnh hoặc một cạnh của đồ thị. Các vector đặc trưng biểu diễn cho các đối tượng giống nhau phải có số lượng chiều như nhau.
+
+Các vector này có thể có một cấu trúc đã được định nghĩa trước với tập các trường được khảo sát trên đối tượng tương ứng với đỉnh đang xét. Ngoài ra các vector của có thể được huấn luyện nhờ vào các mô hình học máy. Một bài toán được quan tâm đến khi nhắc đến các vector đặc trưng này là từ các liên kết của đồ thị và các context vector đã được định nghĩa trước, tìm ra các vector đặc trưng biểu diễn tốt cho các đối tượng đỉnh hoặc/và cạnh của đồ thị đó. Bài toán này được gọi là representation learning.
+
+(Ảnh minh họa vector đặc trưng)
+
+\subsubsection{Ma trận kề (adjacent matrix)}
+
+Ma trận kề là ma trận chứa các thông tin về các cạnh nối giữa các đỉnh trong đồ thị. ma trận kề có kích thước $|V| \times |V|$. Phần tử ở hàng x cột y của ma trận chứa thông tin về kết nối giữa 2 đỉnh u và v và có giá trị như sau:
+\begin{itemize}
+	\item Đồ thị không trọng số: 0 hoặc x biểu thị hoặc không có cạnh nối giữa 2 điểm u và v hoặc có x cạnh đang nối giữa 2 đỉnh này.
+	\item Đồ thị có trọng số: 0 hoặc w biểu thị hoặc không có cạnh nối giữa u và v hoặc có cạnh nối giữa u và v và trọng số của cạnh này là w
+\end{itemize}
+
+(Minh họa ma trận kề)
+
+\subsubsection{Bậc của đồ thị}
+
+Bậc của một đỉnh được định nghĩa là tổng số cạnh nối với đỉnh đó. Đối với đơn đồ thị, số cạnh nối với đỉnh đang xét cũng bằng số đỉnh kề với đỉnh đang xét. Bậc của đỉnh u được ký hiệu là deg(u).
+
+Tính chất:
+\begin{itemize}
+	\item tổng số bậc của tất cả các đỉnh là số chẳn và có giá trị là $2m$ với m là số lượng cạnh của đồ thị
+	\begin{equation*}
+		\sum_{v \in V}{deg(v)} = 2m
+	\end{equation*}
+	\item Tổng số đỉnh có bậc lẻ là số chẵn.
+	\item Đối với đồ thị vô hướng, tổng giá trị của hàng x hoặc cột x của ma trận kề biểu diễn đồ thị đó chính bằng deg(x)
+\end{itemize}
+
+Đối với đồ thị có hướng, bậc của một đỉnh còn được phân ra làm 2 thành phần:
+\begin{itemize}
+	\item Bán bậc vào là số lượng cạnh nối với đỉnh đang xét và có hường vào đỉnh đó. Ký hiệu bán bậc vào của đỉnh u là $deg^-(u)$
+	\item Bán bậc ra là số lượng cạnh nối với đỉnh đang xét và có hường ra khỏi đỉnh đó. Ký hiệu bán bậc ra của đỉnh u là $deg^+(u)$
+\end{itemize}
+
+\begin{equation*}
+	deg(u) = deg^-(u) + deg^+(u)
+\end{equation*}
 
 \subsection{Mô hình Graph Convolution Network}
 
