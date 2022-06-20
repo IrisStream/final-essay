@@ -275,8 +275,68 @@ Tính chất:
 	deg(u) = deg^-(u) + deg^+(u)
 \end{equation*}
 
-\subsection{Mô hình Graph Convolution Network}
+\subsection{Mô hình Graph Convolution Network và bài toán representation learning}
+
+Để giải bài toán representation learning trên đồ thị, người ta đưa ra giả thuyết rằng, các nút trên đồ thị có khoảng cách càng gần nhau thì sẽ có các đặc tính giống nhau. Từ đó mà vector đặc trưng của những nút gần kế nhau cũng sẽ có khoảng cách gần nhau trong không gian latent.
+
+(Hình minh họa representation learning)
+
+Từ giả thuyết này, người ta đưa ra được ý tưởng chính của mạng GCN là sử dụng các vector đặc trưng của các nút kề với nút đang xét để học được đặc trưng của nút này.
+
+Cho đồ thị $G = (V,E)$, có ma trận kề $A_{n \times n}$ và ma trận đặc trưng $X_{n \times d}$ với $n = |V|$ và d là chiều của ma trận đặc trưng. Mô hình GCN được kiến trúc bởi nhiều lớp ẩn chồng lên nhau. Gọi $H^{(l)}$ là đầu ra của lớp ẩn thứ l. $H^{(l)}$ là một ma trận có kích thức $n \times d_i$ với $d_i$ là số lượng đặc trưng của từng nút tại lớp l. Công thức tính $H^{(l)}$ được biểu diễn một cái đệ quy như sau:
+\begin{equation*}
+	H^{(l)} = 
+	\begin{cases}
+		f(H^{(l-1)}, A), & l > 0 \\
+		X, & l = 0		
+	\end{cases}
+\end{equation*}
+
+Trong đó, f là hàm tính đặc trưng của các nút dựa trên các lớp kề với nút đó. Do đó, f có biểu diễn như sau:
+\begin{equation*}
+	f(H^{(l)}, A) = \sigma(AH^{(l)}W^{(l)})
+\end{equation*}
+
+Với $W$ là ma trận chứa các tham số học có kích thước $d_l \times d_{l+1}$. Và $\sigma$ là hàm kích hoạt phi tuyến của mô hình. 
+
+Với công thức của hàm f như trên, ta thấy được 2 phần thiếu sót như sau:
+\begin{itemize}
+	\item vector đặc trưng của nút u chỉ được tính bởi đặc trưng của các nút kề nó mà chưa được xét bởi các đặc trưng nội tại của nút u. Ta có thể giải quyết vấn đề này bằng các thêm các liên kết vòng (self connected edge) từ một nút đến chính nó. Ta định nghĩa ma trận $\tilde{A}$ là ma trận kề của G đã bổ sung các liên kết vòng:
+	\begin{equation*}
+		\tilde{A} = A + I
+	\end{equation*} 
+	\item Các đỉnh có bậc cao sẽ gây ảnh hưởng đến nhiều nút hơn các đỉnh khác. Và nó cũng sẽ được ảnh hưởng bởi nhiều đỉnh hơn các đỉnh khác. Theo như công thức f ở trên, các đỉnh có bậc cao sẽ ma giá trị rất lớn hoặc rất nhỏ dẫn đến việc cập nhập gradient chậm lại trong quá trình back-propagation. Để giải quyết vấn đề trên, GCN sử dụng phép chuẩn hóa Symetric normalized Laplacian để tránh sự thiên vị trong quá trình học.
+	Từ đó mà ta có công thức đầy đủ của hàm f như sau:
+	\begin{equation*}
+		H^{(l+1)} = \sigma(\tilde{D}^{-1/2}\tilde{A}\tilde{D}^{1/2}H^{(l)}W^{(l)})
+	\end{equation*}
+\end{itemize}
+
+Trong đó, $\tilde{D}$ là ma trận bậc của đồ thị G phép chuẩn hóa đối xứng laplacian có thể được hiểu là với mỗi $\tilde{A}_{u,v}$ sẽ được nhân với một lượng $\frac{1}{\sqrt{deg(u)}\sqrt{deg(v)}}$
 
 \subsection{Mô hình WordGCN}
+
+WordGCN là mô hình được ghép bởi 2 mô hình con là SynGCN và SemGCN. Cả hai mô hình trên đều áp dụng kiến trúc GCN để trích xuất các embeddings của các từ trong bộ ngữ liệu. Trong khi SynGCN trích xuất thông tin cú pháp (syntactic) của các từ thông qua các liên kết của chúng trong các đoạn văn bản. Thì SemGCN rút trích các đặc trưng về ngữ nghĩa (semantic) của các từ thông qua các mối quan hệ như: đồng nghĩa, trái nghĩa, từ viết tắt,...
+
 \subsubsection{Mô hình SynGCN}
+
+SynGCN quan tâm đến đặc trưng của một từ thông qua ví trị và vai trò của từ đó trong câu. theo universal dependency Mỗi từ trong câu sẽ có một mối quan hệ với một từ khác trong câu hoặc là chủ thể của cả câu (không có liên kết đến từ khác). Các mối quan hệ đó được gọi là các universal dependency. Từ đây, ta có thể xem mỗi câu $s = \{w_1, w_2,...,w_n\}$ trong bộ ngữ liệu là một đồ thị con dạng cây có hướng $G_s = (V_s, E_s)$ với các nút là các từ $V_s=\{w_1, w_2, w_3...,w_n\}$ và các dependency là các cạnh của đồ thị có dạng $(w_i, w_j, d_{ij})$ với $d_{ij}$ là mối quan hệ giữa $w_i$ và $w_j$. Lúc này, ta có thể áp dụng Thuật toán GCN lên đồ thị này. 
+
+(Hình minh họa GCN)
+
+Nhận xét thấy GCN áp dụng vào trường hợp này khá tương tự với mô hình CBOW. Mô hình này sử dụng tập các từ xung quanh $w_i$ để học các đặc trưng của $w_i$. Tập các từ như vậy được gọi là tập Context của $w_i$.
+
+\begin{equation*}
+	C_{w_i} = \{w_{i+j}: -c \leq j \leq c, j \neq 0\}
+\end{equation*}
+
+Trong đó, $c$ là kích thước của cửa sổ trượt.
+
+Đối với SynGCN, tập Context của $w_i$ được định nghĩa là tập các các từ tương ứng với nút kề với $w_i$:
+\begin{equation*}
+	C_{w_i} = N(w_i) = \{w_j: (w_i, w_j, l_{i,j}) \in E_s\}
+\end{equation*}
+
+Khác với GCN thông thường, Đồ thị sử dụng trong SynGCN không bao gồm các liên kết vòng (self-loop) trong $G_s$.
+
 \subsubsection{Mô hình SemGCN}
