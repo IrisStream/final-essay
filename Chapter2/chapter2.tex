@@ -6,11 +6,24 @@
 
 Transformer là một mô hình có kiến trúc encoder-decoder. Mô hình bao gồm 2 thành phần chính là Encoder(bộ mã hóa) và Decoder(bộ giải mã). Khi đưa một đoạn văn bản nguồn vào, mô hình sẽ xử lý vào đưa ra đoạn văn bản có ngữ nghĩa tương ứng ở ngôn ngữ đích.
 
-(Hình minh họa encoder-decoder)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.4]{images/The_transformer_encoders_decoders}
+        \caption{Encoder-decoder}
+        \label{fig:encoder-decoder}
+    \end{center}
+\end{figure}
 
 Cụ thể hơn, Bộ mã hóa sẽ bao gồm nhiều lớp mã hóa xếp chồng lên nhau. Theo paper transformer, họ sử dụng 6 lớp mã hóa để tạo thành một bộ mã hóa.  Bộ giải mã, tương tự cũng được xếp chồng bởi các lớp giải mã. Số lượng lớp của 2 thành phần phải bằng nhau.
 
-(hình transformer high level)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.35]{images/The_transformer_encoder_decoder_stack}
+        \caption{Encoder-decoder}
+        \label{fig:encoder-decoder-stack}
+    \end{center}
+\end{figure}
+
 
 
 \subsection{Encoder}
@@ -22,13 +35,26 @@ Với mỗi lớp mã hóa sẽ bao gồm 2 lớp con:
 	\item Feed forwarding: Mã hóa phân bố xác xuất tính toán được thành các context vector để đưa vào các lớp mã hóa phía trên.
 \end{itemize}
 
-(hình minh họa cụ thể encoder)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.35]{images/encoder}
+        \caption{Encoder}
+        \label{fig:encoder}
+    \end{center}
+\end{figure}
+
 
 \subsubsection{Cơ chế Self-attention}
 
 Self-attention là một cơ chế mới được giới thiệu trong "attention is all need". Cơ chế này khác với cơ chế attention trong các mạng Seq2Seq trước đó. Self-attention cho phép ta biểu diễn lại mối quan hệ giữa các từ trong một đoạn văn bản.
 
-(Hình minh họa self-attention)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=1.0]{images/self-attention}
+        \caption{self-attention}
+        \label{fig:self-attention}
+    \end{center}
+\end{figure}
 
 Hình trên cho ta một minh họa về cơ chế self-attention. Xét từ "two", theo tư duy của con người, ta sẽ phân tích xem từ "two" trong câu đang có quan hệ gì với những từ khác. Ngoài ra, ta còn xem xét tầm quan trọng của các từ khác tác động lên ý nghĩa của câu. Từ đó mà ta có thể có được một cái nhìn rõ ràng hơn về vai trò của từ này trong câu.
 
@@ -44,7 +70,14 @@ Trong đó, Q, K, V lần lượt là các ma trận Query, Key, Value. Hai ma t
 
 Trong công thức, ta thấy được tích vô hướng của ma trận Q và K được chuẩn hóa bởi hệ số $\sqrt{d}$ (d là số chiều của vector embedding). Lý do cho việc chuẩn hóa này là do khi d có giá trị lớn, tích vô hướng của Q và K sẽ có giá trị lớn theo do đó, nếu không chuẩn hóa về giá trị nhỏ hơn thì hàm softmax sẽ có độ hội tụ khá chậm
 
-(minh họa đồ thị đạo hàm softmax)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.7]{images/softmax-func}
+        \caption{Đồ thị hàm softmax và đạo hàm của một thành phần trong tập phân loại}
+        \label{fig:softmax-func}
+    \end{center}
+\end{figure}
+
 
 \begin{algorithm}[H]
     \caption{Self\_attention($context, w_K, w_Q, w_V$)}
@@ -69,15 +102,25 @@ Ngoài ra, sử dụng cơ chế self-attention còn giúp ta tránh được tr
 
 Với việc sử dụng N lớp self-attention chạy song song với các bộ trọng số khác nhau, ta có được N ma trận context khác nhau. Lúc này, ta cần có một phương phát khác để tổng hợp thông tin từ các lớp self-attention này lại để đưa vào lớp feed-forward. 
 
-(Hình minh họa multi context vector)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.8]{images/multihead-context-vector}
+        \caption{Multihead-context-vector}
+        \label{fig:softmax-func}
+    \end{center}
+\end{figure}
 
 Để làm được việc đó, transformer ghép theo chiều ngang các ma trận context lại rồi nhân với một bộ trọng số để đưa ra một kết quả duy nhất là một ma trận với các dùng là các context vector cũng đồng thời là đầu vào cho bộ giải mã ở phía trên.
 
-(Hình minh họa feed-forward)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.3]{images/transformer_attention_heads_weight_matrix_o}
+        \caption{Multihead-context-vector}
+        \label{fig:multihead-feed-forward}
+    \end{center}
+\end{figure}
 
 Hình dưới minh họa cho việc sử dụng nhiều lớp self-attention trên cùng một câu với mỗi một màu tương ứng với kết quả của một lớp self-attention khác nhau.
-
-(Hình minh họa multi head attention)
 
 \begin{algorithm}[H]
     \caption{Multihead attention($context$)}
@@ -90,12 +133,25 @@ Hình dưới minh họa cho việc sử dụng nhiều lớp self-attention tr�
     \end{algorithmic}
 \end{algorithm}
 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/multihead-attention}
+        \caption{Multihead attention}
+        \label{fig:multihead-attention}
+    \end{center}
+\end{figure}
+
+
 
 \subsubsection{Positional encoding}
 
 Cách tính toán song song của cơ chế self-attention dẫn đến một vấn đề đối với các từ trong đầu vào. Embeedings biểu diễn các từ này chưa biểu diễn được thông tin về thứ tự của các từ trong câu. Trong khi thông tin này là một thông tin quan trọng vì thay đổi vị trí của các từ có thể dẫn đến một câu hoàn toàn khác ý nghĩa.
 
-(Hình minh họa về thứ tự từ hoặc câu minh họa)
+Một ví dụ về việc đối chỗ một từ trong câu khiến cho ý nghĩa của câu trở nên trái ngược hoàn toàn:
+\begin{itemize}
+	\item "Please don't go! I love you!"
+	\item "Please go! I don't love you!"
+\end{itemize}
 
 Transformer sử dụng cơ chế positional encoding. Cơ chế này giúp đưa thông tin về vị trí của các từ vào trong các embeddings. Cụ thể hơn, trước khi embeddings được đưa vào trong mô hình, nó được cộng với một vector tương ứng với vị trí trong câu. Những vector này tuân theo một một quy định nhất định. Chúng phải thể hiện được sự khác biệt về vị trí của các từ trong câu và cả khoảng cách của các từ trong câu. 
 
@@ -107,19 +163,38 @@ Công thức tính toán các vector này như sau:
 	PE_{(pos, 2i+1)} = \cos{\frac{pos}{10000^{\frac{2i}{d_model}}}}
 \end{equation*}
 
-(Lý giải về công thức)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/positional-embedding}
+        \caption{Đồ thị positional embedding}
+        \label{fig:positional embedding}
+    \end{center}
+\end{figure}
+
 
 
 \subsection{Decoder}
 Các lớp của bộ giải mã cũng có 2 lớp con là Self-attention và Feed-forwarding giống với bộ mã hóa. Tuy nhiên giữa 2 lớp con này có một lớp trung gian là Encoder-Decoder attention. Lớp này có cơ chế giống với cơ chế attention trong mô hình Seq2Seq với thông tin của các hidden layer chính là đầu ra của bộ mã hóa.
 
-(hình minh họa cụ thể decoder)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/Transformer_decoder}
+        \caption{Transformer decoder}
+        \label{fig:decoder}
+    \end{center}
+\end{figure}
 
 \subsubsection{Masked self attention}
 
 Khác với lớp self-attention ở bộ mã hóa, lớp masked self attention ở bộ giải mã chỉ tìm kiếm các mối quan hệ của từ hiện tại với các từ đã được giải mã trước đó. Do đó, trước khi thực hiện tính toán trên hàm softmax, giá trị score của các từ chưa được giải mã sẽ được gắn nhãn là $-\infty$. Sau đó, các bước tính toán sẽ tương tự như trong bộ mã hóa.
 
-(Hình minh họa masked self-attenion)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.3]{images/self-attention-and-masked-self-attention}
+        \caption{So sánh self attention và maked self attention}
+        \label{fig:masked-self-attention}
+    \end{center}
+\end{figure}
 
 Ta có thể điều chỉnh lại hàm self attention như sau:
 
@@ -144,7 +219,13 @@ Tham số masked thể hiện kể từ vị trí này, các phần tử phía s
 \subsubsection{encoder-decoder attention}
 Một điểm khác biệt dễ thấy giữa bộ mã hóa và bộ giải mà là lớp encoder-decoder attention được đặt giữa 2 lớp self attetion lvâf feed-forward. Công dụng của lớp này giúp cho decoder có thể giải mã ra được các từ của văn bản đích dựa trên độ liên quan của mỗi từ với các từ trong văn bản nguồn. 
 
-(Minh họa encoder-decoder attention)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.4]{images/encoder-decoder-attention}
+        \caption{encoder-decoder-atention}
+        \label{fig:encoder-decoder-attention}
+    \end{center}
+\end{figure}
 
 Đầu ra lớp trên cùng của mã hóa sẽ được biến đổi thành 2 vector K và V. Quá trình giải mã được thực hiện như sau:
 
@@ -185,7 +266,13 @@ Quá trình giải mã sẽ được bắt đầu với token "<bos>" và thực
 
 với mỗi lớp con trong cả bộ mã hóa lẫn bộ giải mã, ta đặt thêm một lớp normalize vào ngay trên lớp con đó. Lớp normalize này nhận vào input là kết quả của lớp con ngay dưới của nó và cả đầu vào trước khi đi vào lớp con đó. Thưc hiện phép cộng 2 ma trận này và chuẩn hóa lại trước khi đưa vào lớp con phía trên.
 
-(Hình minh họa Residual)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/residual}
+        \caption{Residual}
+        \label{fig:residual}
+    \end{center}
+\end{figure}
 
 
 \subsection{Tổng kết mô hình}
@@ -196,7 +283,13 @@ Với mỗi lớp con của bộ mã hóa sẽ bao gồm một lớp multihead-a
 
 Với mỗi lớp giải mã, chúng được xếp chồng bởi 3 lớp con lần lượt là: masked-multihead-attention, encoder-decoder-attention và feed-forwarding. Lớp giải mã cũng được áp dụng kiến trúc residual block giúp mô hình tránh được hiện tượng vanishing gradient.
 
-(Hình minh họa tổng kết mô hình)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.3]{images/transformer_sumary}
+        \caption{Tổng kết mô hình transformer}
+        \label{fig:transformer-summary}
+    \end{center}
+\end{figure}
 
 
 \section{Mô hình WordGCN huấn luyện embedding cho bộ ngữ liệu}
@@ -337,6 +430,11 @@ Trong đó, $c$ là kích thước của cửa sổ trượt.
 	C_{w_i} = N(w_i) = \{w_j: (w_i, w_j, l_{i,j}) \in E_s\}
 \end{equation*}
 
-Khác với GCN thông thường, Đồ thị sử dụng trong SynGCN không bao gồm các liên kết vòng (self-loop) trong $G_s$.
 
 \subsubsection{Mô hình SemGCN}
+
+Các embedding sau khi được huấn luyện qua mạng SynGCN sẽ được đưa vào mạng SemGCN để học các đặc trưng về ngữ nghĩa (semantic context). Mô hình cho phép học các mối quan hệ có tính đối xứng lẫn các mối quan hệ không đối xứng. Đối với các mô hình trước đây, hoặc là chúng chỉ có thể giải quyết các mối quan hệ đối xứng hoặc chưa xử lý tốt vối các môi không đối xứng. Gọi G =(V,E) là đồ thị được tạo thành từ các ngữ nghĩa trong bộ dữ liệu. Ta sẽ có các đỉnh là các từ trong bộ nghữ liệu còn các cạnh là các mối quan hệ giữa chúng. Các cạnh trong G có định hướng. Đối với 2 từ x và y có liên kết đối xứng thì giữa 2 đỉnh tương ứng với x và y sẽ có 2 cạnh ngược hướng.
+
+(Hình minh họa SemGCN)
+
+Sau khi có được đồ thì biểu diễn, ta có thể sử dụng thuật toán GCN để tối ưu các embeddings đã được huấn luyện từ mô hình SynGCN.
