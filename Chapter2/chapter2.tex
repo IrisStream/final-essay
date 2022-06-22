@@ -310,17 +310,41 @@ Trong đó, V là tập các đỉnh (Vertices) và E là tập các cạnh (Edg
 
 Đa đồ thị (multigraph) là đồ thị thỏa $\forall x,y \in V | $ có thể có nhiều hơn 1 cạnh nối giữa 2 đỉnh này 
 
-Giả đồ thị (speudo graph) là đồ thị chứa các đỉnh có khả năng nối cạnh với chính nó.
+Giả đồ thị (speudograph) là đồ thị chứa các đỉnh có khả năng nối cạnh với chính nó.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.8]{images/graph-type-1}
+        \caption{graph type 1}
+        \label{fig:graph-type-1}
+    \end{center}
+\end{figure}
 
 Đồ thị vô hướng (undirected graph) là đồ thị chứa các cạnh không định hướng. Nói cách khác, cạnh nối hai đỉnh x và y cũng sẽ được hiểu là cạnh đỉnh y với đỉnh x.
 
 Đồ thị có hướng (directed graph) là đồ thị chứa các cạnh có hướng. nói cách khác, cạnh nói hai đỉnh x và y sẽ phân biệt với cạnh nối từ y đến x.
 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.2]{images/graph-type-2}
+        \caption{graph type 2}
+        \label{fig:graph-type-2}
+    \end{center}
+\end{figure}
+
+
 Đồ thị có trọng số là đồ thị mà các cạnh của đồ thị được biểu diễn bằng một trọng số nào đó. Lúc này mỗi cạnh $e \in E$ sẽ được biểu diễn bởi $(x, y, w)$. Với x và y là hai đỉnh của cạnh và w là trọng số của cạnh đó
 
 Đồ thị không trọng số là đồ thị mà các cạnh của đồ thị không được biểu diễn bởi một trọng số.
 
-(Ảnh minh họa các loại đồ thị)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/graph-type-3}
+        \caption{graph type 3}
+        \label{fig:graph-type-3}
+    \end{center}
+\end{figure}
+
 
 Ngoài ra, khi kết hợp cách tính chất của các loại đồ thị khác nhau, ta có thể có được các dạng đồ thị khác như: Đơn đồ thị vô hướng, Đa đồ thị có hướng, Giả Đa đồ thị có hướng có trọng số,..
 
@@ -332,7 +356,14 @@ Lý thuyết đồ thị khi được áp dụng vào các bài toán học máy
 
 Các vector này có thể có một cấu trúc đã được định nghĩa trước với tập các trường được khảo sát trên đối tượng tương ứng với đỉnh đang xét. Ngoài ra các vector của có thể được huấn luyện nhờ vào các mô hình học máy. Một bài toán được quan tâm đến khi nhắc đến các vector đặc trưng này là từ các liên kết của đồ thị và các context vector đã được định nghĩa trước, tìm ra các vector đặc trưng biểu diễn tốt cho các đối tượng đỉnh hoặc/và cạnh của đồ thị đó. Bài toán này được gọi là representation learning.
 
-(Ảnh minh họa vector đặc trưng)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/feature-vector}
+        \caption{Feature vector}
+        \label{fig:feature-vector}
+    \end{center}
+\end{figure}
+
 
 \subsubsection{Ma trận kề (adjacent matrix)}
 
@@ -342,7 +373,14 @@ Ma trận kề là ma trận chứa các thông tin về các cạnh nối giữ
 	\item Đồ thị có trọng số: 0 hoặc w biểu thị hoặc không có cạnh nối giữa u và v hoặc có cạnh nối giữa u và v và trọng số của cạnh này là w
 \end{itemize}
 
-(Minh họa ma trận kề)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/adj-matrix}
+        \caption{Ma trận kề}
+        \label{fig:adj-matrix}
+    \end{center}
+\end{figure}
+
 
 \subsubsection{Bậc của đồ thị}
 
@@ -372,7 +410,14 @@ Tính chất:
 
 Để giải bài toán representation learning trên đồ thị, người ta đưa ra giả thuyết rằng, các nút trên đồ thị có khoảng cách càng gần nhau thì sẽ có các đặc tính giống nhau. Từ đó mà vector đặc trưng của những nút gần kế nhau cũng sẽ có khoảng cách gần nhau trong không gian latent.
 
-(Hình minh họa representation learning)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{images/representation-learning}
+        \caption{Representation learning}
+        \label{fig:representation-learning}
+    \end{center}
+\end{figure}
+
 
 Từ giả thuyết này, người ta đưa ra được ý tưởng chính của mạng GCN là sử dụng các vector đặc trưng của các nút kề với nút đang xét để học được đặc trưng của nút này.
 
@@ -415,7 +460,14 @@ WordGCN là mô hình được ghép bởi 2 mô hình con là SynGCN và SemGCN
 
 SynGCN quan tâm đến đặc trưng của một từ thông qua ví trị và vai trò của từ đó trong câu. theo universal dependency Mỗi từ trong câu sẽ có một mối quan hệ với một từ khác trong câu hoặc là chủ thể của cả câu (không có liên kết đến từ khác). Các mối quan hệ đó được gọi là các universal dependency. Từ đây, ta có thể xem mỗi câu $s = \{w_1, w_2,...,w_n\}$ trong bộ ngữ liệu là một đồ thị con dạng cây có hướng $G_s = (V_s, E_s)$ với các nút là các từ $V_s=\{w_1, w_2, w_3...,w_n\}$ và các dependency là các cạnh của đồ thị có dạng $(w_i, w_j, d_{ij})$ với $d_{ij}$ là mối quan hệ giữa $w_i$ và $w_j$. Lúc này, ta có thể áp dụng Thuật toán GCN lên đồ thị này. 
 
-(Hình minh họa GCN)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=1.0]{images/syngcn_model}
+        \caption{SynGCN}
+        \label{fig:syngcn}
+    \end{center}
+\end{figure}
+
 
 Nhận xét thấy GCN áp dụng vào trường hợp này khá tương tự với mô hình CBOW. Mô hình này sử dụng tập các từ xung quanh $w_i$ để học các đặc trưng của $w_i$. Tập các từ như vậy được gọi là tập Context của $w_i$.
 
@@ -435,6 +487,13 @@ Trong đó, $c$ là kích thước của cửa sổ trượt.
 
 Các embedding sau khi được huấn luyện qua mạng SynGCN sẽ được đưa vào mạng SemGCN để học các đặc trưng về ngữ nghĩa (semantic context). Mô hình cho phép học các mối quan hệ có tính đối xứng lẫn các mối quan hệ không đối xứng. Đối với các mô hình trước đây, hoặc là chúng chỉ có thể giải quyết các mối quan hệ đối xứng hoặc chưa xử lý tốt vối các môi không đối xứng. Gọi G =(V,E) là đồ thị được tạo thành từ các ngữ nghĩa trong bộ dữ liệu. Ta sẽ có các đỉnh là các từ trong bộ nghữ liệu còn các cạnh là các mối quan hệ giữa chúng. Các cạnh trong G có định hướng. Đối với 2 từ x và y có liên kết đối xứng thì giữa 2 đỉnh tương ứng với x và y sẽ có 2 cạnh ngược hướng.
 
-(Hình minh họa SemGCN)
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=1.0]{images/semgcn_model}
+        \caption{SemGCN}
+        \label{fig:semgcn}
+    \end{center}
+\end{figure}
+
 
 Sau khi có được đồ thì biểu diễn, ta có thể sử dụng thuật toán GCN để tối ưu các embeddings đã được huấn luyện từ mô hình SynGCN.

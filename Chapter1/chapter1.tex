@@ -77,8 +77,25 @@ Trong bài toán dịch máy, các đoạn văn bản thô cần phải được
 	\item Các token sau khi được tách ra vẫn chưa thể đưa vào mô hình do chúng vẫn ở dạng dữ liệu mà các mô hình chưa thể hiểu. Do đó, với mỗi token, ta cần chuyển chúng thành các vector N chiều (N chọn trước) mang tính chất và đại diện cho từ đó. Với mỗi chiều của vector được biểu diễn bằng một số thực. Các vector này được gọi là các Word Embeddings. Các Word Embeddings sẽ là đầu vào của mô hình. Một số phương pháp để tính toán các Word Embeddings trước đây gồm: ...
 \end{itemize}
 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.8]{images/token-embeddings}
+        \caption{Tokenization \& word embeddings}
+        \label{fig:semgcn}
+    \end{center}
+\end{figure}
+
+
 \section{Graph Convolution Network (GCN)}
-Khai thác quan hệ giữa các điểm dữ liệu với nhau là một đề tài được nhiều sự quan tâm trong học máy. Trong các mô hình học sâu trước đây, ta chỉ có thể trích xuâts được các mối quan hệ thông thường từ các bộ dữ liệu Euclidian. 
+Khai thác quan hệ giữa các điểm dữ liệu với nhau là một đề tài được nhiều sự quan tâm trong học máy. Trong các mô hình học sâu trước đây, ta chỉ có thể trích xuất được các mối quan hệ thông thường từ các bộ dữ liệu Euclidian. 
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.3]{images/chemistry-molecule}
+        \caption{Các phân tử hóa học được biểu diễn dưới dạng đồ thị}
+        \label{fig:chemistry-molecule}
+    \end{center}
+\end{figure}
 
 Trong thực tế, không phải mọi dữ liệu đều biểu diễn ở dạng Euclidian. Do đó, để khai thác được thông tin từ các bộ dữ liệu đồ thị (non-Euclidian), ta cần sử dụng các mô hình Graph Neural Network (GNN). Trong vài năm qua, nhiều biến thể của đã được phát triển. Trong đó, Graph Convolution Network (GCN) là một biến thể quan trọng được xem như là biến thể cơ bản nhất của GNN.
 
@@ -87,6 +104,15 @@ GCN ứng dụng phép tích chập được giới thiệu trong convolution la
 	\item Đối với phép tích chập trên CNN, một đoạn dữ liệu của lớp hiện tại sẽ được nhân vô hướng (tích chập) với một bộ lọc (\textit{filter} hoặc \textit{kernel}). Bộ lọc sẽ trượt trên bộ dữ liệu và các đầu ra của phép tích chập sẽ được truyền vào lớp tiếp theo của mạng.
 	\item Với phép tích chập trên GCN. Ta xét từng nút(node) của đồ thị. Với mỗi nút, ta nhóm nút này với các nút kề của chính nó lại và thực hiền phép tích chập tương tự với một màn lọc. Do số lượng nút kề của mỗi nút là khác nhau, nên kích thước của filter sẽ không cố định. Phép tích chập sẽ được thực hiện trên tất cả các nút của đồ thị.
 \end{itemize}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.6]{images/cnn-vs-gcn}
+        \caption{CNN vs GCN}
+        \label{fig:cnn-vs-gcn}
+    \end{center}
+\end{figure}
+
 
 \section{Word GCN}
 Ngôn ngữ là một dạng dữ liệu non-Euclidian. Do đó, trích xuất thông tin của chúng bằng các mô hình GCN được kì vọng là có kết quả tốt hơn các phương pháp trước đó. Các loại thông tin có thể khai thác bao gồm:
