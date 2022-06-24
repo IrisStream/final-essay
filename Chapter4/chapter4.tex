@@ -2,20 +2,20 @@
 
 \section{Huấn luyện}
 
-Như đã trên bày ở trên, cả 2 mô hình WordGCN và  \textit{transformer}  đều sẽ được huấn luyện bởi kho ngữ liệu WMT14. Với khoảng 4.5 triệu câu song ngữ Anh Đức. Sử dụng bộ tự vựng bao gồm 50000 từ cho cả 2 ngôn ngữ Anh và Đức.
+Như đã trên bày ở trên, cả 2 mô hình \textit{WordGCN} và  \textit{Transformer}  đều sẽ được huấn luyện bởi kho ngữ liệu \textit{WMT14}. Với khoảng 4.5 triệu câu song ngữ Anh Đức. Sử dụng bộ tự vựng bao gồm 50000 từ cho cả 2 ngôn ngữ Anh và Đức.
 
 \subsection{Kích thước batch của dữ liệu huấn luyện}
-Kích thước batch của dữ liệu được huấn luyện đối với mô hình \textit{SynGCN} là 128 và mô hình \textit{SemGCN) là 64. 
+Kích thước batch của dữ liệu được huấn luyện đối với mô hình \textit{SynGCN} là 128 và mô hình \textit{SemGCN} là 64. 
 
-Đối với  \textit{transformer} , mỗi batch dữ liệu sẽ có kích thước 25000.
+Đối với \textit{Transformer}, mỗi batch dữ liệu sẽ có kích thước 25000.
 
 \subsubsection{Thuật toán tối ưu}
-\textit{SynGCN} và \textit{SemGCN) sử dụng thuật toán Adam với giá trị của learning rate:
+\textit{SynGCN} và \textit{SemGCN} sử dụng thuật toán \textit{Adam} với giá trị của \textit{learning rate}:
 \begin{equation*}
 	l_{rate} = 10^{-3}
 \end{equation*}
 
-Đối với  \textit{transformer} , thuật toán tối ưu được sử dụng vẫn là  \textit{transformer}  với các siêu tham số như sau:
+Đối với \textit{Transformer}, thuật toán tối ưu được sử dụng vẫn là \textit{Adam} với các siêu tham số như sau:
 \begin{equation*}
 	\begin{cases}
 		l_{rate} = 10^{-3} \\
@@ -41,5 +41,5 @@ Kết quả huấn luyện của mô hình đề xuất tuy chưa thể vượt 
 \begin{itemize}
 	\item Các bộ siêu tham số chưa được tối ưu giá trị.
 	\item Kho từ vựng còn thiếu sót nhiều từ.
-	\item Kích thước embedding được huấn luyện ở mô hình WordGCN chưa phù hợp khi đưa vào mô hình  \textit{transformer} .
+	\item Kích thước embedding được huấn luyện ở mô hình \textit{WordGCN} chưa phù hợp khi đưa vào mô hình \textit{transformer} .
 \end{itemize}
