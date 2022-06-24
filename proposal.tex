@@ -69,7 +69,7 @@
     \begin{center}
     %Tên đề tài phải VIẾT HOA
         
-        \textbf{\huge Sử dụng GNN biểu diễn các Embeddings cho mô hình Transformer} 
+        \textbf{\huge Sử dụng GNN biểu diễn các Embeddings cho mô hình  \textit{transformer} } 
         \\
         
     %Tên đề tài bằng tiếng Anh (nếu có)
@@ -117,7 +117,7 @@
 
     Đồ thị xuất hiện một cách tự nhiên trong nhiều lĩnh vực ứng dụng, từ phân tích xã hội, sinh học, hóa học đến thị giác máy tính. Đồ thị cho phép nắm bắt các mối quan hệ cấu trúc giữa các dữ liệu và do đó cho phép thu thập nhiều thông tin chi tiết hơn.
 
-    Một trong các phương pháp giúp encode các từ ngữ thành các vector là sử dụng Graph Convolution Neural NetWork (GCN). Lợi ích của việc sử dụng GCN là: 
+    Một trong các phương pháp giúp encode các từ ngữ thành các vector là sử dụng Graph Convolution Neural NetWork (GCN). Lợi ích của việc sử dụng \textit{GCN} là: 
     \begin{itemize}
         \item Thể hiện được các Syntactic Context giữa các từ ngữ trong câu.
         \item Thể hiện được các Semantic Context giữa các từ ngữ với nhau.
@@ -126,17 +126,17 @@
    
     \subsection{Mục tiêu đề tài}
     
-    Mục tiêu của đề tài này bao gồm: (1) - Nghiên cứu, khỏa sát các thuật toán biểu diễn từ ngữ thành các embeddings và (2) - Kết hợp cài đặt các thuật toán giúp nâng cao hiệu xuất của mô hình transformer để giải quyết bài toán Machine Translation.
+    Mục tiêu của đề tài này bao gồm: (1) - Nghiên cứu, khỏa sát các thuật toán biểu diễn từ ngữ thành các embeddings và (2) - Kết hợp cài đặt các thuật toán giúp nâng cao hiệu xuất của mô hình  \textit{transformer}  để giải quyết bài toán Machine Translation.
 
-    Việc nghiên cứu khảo sát các thuật toán nhằm đưa ra được các đánh giá về ưu điểm và nhược điểm của chúng. Từ đó, cho thấy được độ hiệu quả và tiềm năng của GCN trong bài toán machine translation.
+    Việc nghiên cứu khảo sát các thuật toán nhằm đưa ra được các đánh giá về ưu điểm và nhược điểm của chúng. Từ đó, cho thấy được độ hiệu quả và tiềm năng của \textit{GCN} trong bài toán machine translation.
 
     Việc kết hợp cài đặt nhằm chứng minh tính hiệu quả của mô hình đề xuất.
     
     \subsection{Phạm vi của đề tài}
     
-    Nghiên cứu ở (\cite{transfomer-survey}) đã chỉ các các hướng nghiên cứu cho mô hình transfomer. Trong đó: (1) - Cải thiện hiệu suất cho mô hình transformer, (2) - Khái quát hóa mô hình giúp huấn luyện với tập dữ liệu nhỏ hơn. (3) - Tăng độ thích nghi của mô hình vào các tác vụ thực tế hơn.
+    Nghiên cứu ở (\cite{transfomer-survey}) đã chỉ các các hướng nghiên cứu cho mô hình transfomer. Trong đó: (1) - Cải thiện hiệu suất cho mô hình  \textit{transformer} , (2) - Khái quát hóa mô hình giúp huấn luyện với tập dữ liệu nhỏ hơn. (3) - Tăng độ thích nghi của mô hình vào các tác vụ thực tế hơn.
 
-    Đề tài của khóa luận này  có phạm vi nghiên cứu giúp cải thiện hiệu suất của mô hình transformer dựa trên embeddings đã được huấn luyện trước(\cite{wordgcn2019})
+    Đề tài của khóa luận này  có phạm vi nghiên cứu giúp cải thiện hiệu suất của mô hình  \textit{transformer}  dựa trên embeddings đã được huấn luyện trước(\cite{wordgcn2019})
     
     Đề tài thực hiện bài toán dịch cụ thể từ tiếng Anh sang tiếng Đức.
     
@@ -146,10 +146,10 @@
     
     \Large{\textbf{Phương pháp chính.}} Theo các đề xuất ở (\cite{wordgcn2019}):
     \begin{itemize}
-        \item Mô hình SynGCN để huấn luyện các word embeddings theo Syntactic Context.
-        \item Sau đó sử dụng mô hình SemGCN để huấn luyện các word embeddings từ SynGCN theo Semantic Context.
+        \item Mô hình \textit{SynGCN} để huấn luyện các word embeddings theo Syntactic Context.
+        \item Sau đó sử dụng mô hình \textit{SemGCN) để huấn luyện các word embeddings từ \textit{SynGCN} theo Semantic Context.
     \end{itemize}  
-    Phương pháp đề xuất trong khóa luận nhắm tích hợp các embeddings sau khi được vào huấn luyện ở mô hình SynGCN+SemGCN sẽ được sử dụng để huấn luyện mô hình transformer được đề xuất ở (\cite{transformer}) với kì vọng sẽ tăng được hiệu xuất của mô hình.
+    Phương pháp đề xuất trong khóa luận nhắm tích hợp các embeddings sau khi được vào huấn luyện ở mô hình \textit{SynGCN}+\textit{SemGCN) sẽ được sử dụng để huấn luyện mô hình  \textit{transformer}  được đề xuất ở (\cite{ \textit{transformer} }) với kì vọng sẽ tăng được hiệu xuất của mô hình.
 
     \Large{\textbf{Dữ liệu thực nghiệm.}} Sử dụng tập dữ liệu Multi30k để huấn luyện mô hình có thể dịch từ tiếng Anh sang tiếng Đức. Sử dụng 80\% dữ liệu để huấn luyện và 20\% dữ liệu để kiểm thử.
 
@@ -159,9 +159,9 @@
        
     Sau khi tiến hành, nghiên cứu này kỳ vọng sẽ đạt được các kết quả sau:
     \begin{itemize}
-        \item Nắm được ý tưởng của việc sử dụng GCN để huấn luyện các word embeddings.
+        \item Nắm được ý tưởng của việc sử dụng \textit{GCN} để huấn luyện các word embeddings.
         \item Cài đặt được mô hình baseline.
-        \item Tích hợp SynGCN và SemGCN vào mô hình transformer. So sánh hiệu suất của mô hình đề xuất với mô hình baseline.
+        \item Tích hợp \textit{SynGCN} và \textit{SemGCN) vào mô hình  \textit{transformer} . So sánh hiệu suất của mô hình đề xuất với mô hình baseline.
     \end{itemize}
     
     \subsection{Kế hoạch thực hiện}
@@ -172,9 +172,9 @@
     \caption{Bảng kế hoạch thực hiện}\label{tab: }
     \begin{tabular}{crl}\toprule
     \multicolumn{1}{c}{\textbf{Giai đoạn}} &\multicolumn{1}{c}{\textbf{Thời gian}} &\multicolumn{1}{c}{\textbf{Công việc}} \\\midrule
-    1 &01/01/2022 - 31/01/2022 &\begin{tabular}{@{}l@{}}Tìm hiểu kiến thức nền tảng về Transformer \\ Cài đặt mô hình transformer \end{tabular}\\ \midrule
-    2 &01/02/2022 - 28/02/2022 &\begin{tabular}{@{}l@{}}Tìm hiểu kiến thức nền tảng về word embeddings \\ Tìm hiểu kiến thức nền tảng về GCN \\ Tìm hiểu kiến thức nền tảng của SynGCN và SemGCN \end{tabular} \\ \midrule
-    3 &01/03/2022 - 31/03/2022 &\begin{tabular}{@{}l@{}}Tích hợp mô hình SynGCN và SemGCN \\ vào mô hình transformer \end{tabular} \\ \midrule
+    1 &01/01/2022 - 31/01/2022 &\begin{tabular}{@{}l@{}}Tìm hiểu kiến thức nền tảng về  \textit{transformer}  \\ Cài đặt mô hình  \textit{transformer}  \end{tabular}\\ \midrule
+    2 &01/02/2022 - 28/02/2022 &\begin{tabular}{@{}l@{}}Tìm hiểu kiến thức nền tảng về word embeddings \\ Tìm hiểu kiến thức nền tảng về \textit{GCN} \\ Tìm hiểu kiến thức nền tảng của \textit{SynGCN} và \textit{SemGCN) \end{tabular} \\ \midrule
+    3 &01/03/2022 - 31/03/2022 &\begin{tabular}{@{}l@{}}Tích hợp mô hình \textit{SynGCN} và \textit{SemGCN) \\ vào mô hình  \textit{transformer}  \end{tabular} \\ \midrule
     5 &01/04/2022 - 30/04/2022 &\begin{tabular}{@{}l@{}}Chạy các thực nghiệm trên mô hình \\ Phân tích và đánh giá kết quả \end{tabular} \\ \midrule
     6 &01/05/2022 - 31/05/2022 &\begin{tabular}{@{}l@{}}Viết luận văn \\ Làm slide thuyết trình \\ Tập thuyết trình \end{tabular} \\
     \bottomrule
